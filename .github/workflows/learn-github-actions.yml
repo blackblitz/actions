@@ -1,13 +1,44 @@
 name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: Build and test
 on: [push]
 jobs:
-  check-bats-version:
+  lint:
     runs-on: ubuntu-latest
+    container: astral/uv@sha256:dc360d7e5f968c682e8b59e83027a315a0232dead15cb9dfe3e707a12ba390e1
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v7
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
-          node-version: '24'
-      - run: npm install -g bats
-      - run: bats -v
+          python-version-file: ".python-version"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        with:
+          version: "0.12.5"
+      - name: Set up project
+        run: uv sync --locked --all-extras --dev
+      - name: Lint
+        run: uv run ruff check
+      - name: Format-check
+        run: uv run ruff format --check
+      - name: Type-check
+        run: uv run ty check
+  test:
+    runs-on: ubuntu-latest
+    container: astral/uv@sha256:dc360d7e5f968c682e8b59e83027a315a0232dead15cb9dfe3e707a12ba390e1
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version-file: ".python-version"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        with:
+          version: "0.12.5"
+      - name: Set up project
+        run: uv sync --locked --all-extras --dev
+      - name: Run tests
+        run: uv run pytest
