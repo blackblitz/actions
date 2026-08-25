@@ -1,4 +1,4 @@
-name: Learn GitHub Actions
+name: Lint and test
 run-name: Lint and test
 on: [ push ]
 jobs:
