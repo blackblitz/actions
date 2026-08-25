@@ -1,10 +1,10 @@
-name: learn-github-actions
-run-name: Build and test
-on: [push]
+name: Learn GitHub Actions
+run-name: Lint and test
+on: [ push ]
 jobs:
   lint:
     runs-on: ubuntu-latest
-    container: astral/uv@sha256:dc360d7e5f968c682e8b59e83027a315a0232dead15cb9dfe3e707a12ba390e1
+    container: astral/uv@sha256:b34a186d79e99aca2f5f143655cc750770a307da3167d5da625bfa8332a82b7d
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -18,7 +18,7 @@ jobs:
         run: uv run ty check
   test:
     runs-on: ubuntu-latest
-    container: astral/uv@sha256:dc360d7e5f968c682e8b59e83027a315a0232dead15cb9dfe3e707a12ba390e1
+    container: astral/uv@sha256:b34a186d79e99aca2f5f143655cc750770a307da3167d5da625bfa8332a82b7d
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
